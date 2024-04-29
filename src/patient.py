@@ -62,19 +62,22 @@ class Patient:
             raise ValueError("Age must be a positive integer.")
 
     def _validate_ward(self, ward):
-        if ward in WARD_NUMBERS:
-            return ward
-        else:
+        if not isinstance(ward, int) or ward not in WARD_NUMBERS:
             raise ValueError("Invalid ward number provided.")
+        else:
+            return ward
 
     def _validate_room(self, room):
-        if room in ROOM_NUMBERS.get(self.patient_ward, []):
-            return room
-        else:
-            raise ValueError("Invalid room number provided for the selected ward.")
+         if not isinstance(room, int):
+            raise ValueError("Room should be int.")
+         if not any(str(room) in rooms for rooms in ROOM_NUMBERS.values()):
+            raise ValueError(
+                f"Room {room} does not exist in ward {self.patient_ward}.")
+         return room
+         
 
     def set_room(self, room):
-        self.patient_room = self._validate_room(room)
+        self.patient_room = self._validate_room(room) 
 
     def set_ward(self, ward):
         self.patient_ward = self._validate_ward(ward) 
