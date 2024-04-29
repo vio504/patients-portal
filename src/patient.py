@@ -126,4 +126,5 @@ class Patient:
         else:
             print("Failed to commit patient data to the database.")
 
+
    
