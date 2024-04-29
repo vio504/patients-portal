@@ -104,7 +104,7 @@ class Patient:
         return self.patient_room
 
     def commit(self):
-        if None in (self._ward, self._room):
+        if None in (self.patient_ward, self.patient_room):
             raise ValueError("Both ward and room must be set before committing.")
         
         update_data = {
