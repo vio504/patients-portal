@@ -103,6 +103,7 @@ class PatientDB:
                     "%"+patient_name+"%"
                 )
             )
+            print(stmt.compile(compile_kwargs={"literal_binds": True})) #test
             result = conn.execute(stmt)
             keys = result.keys()
             rows = result.fetchall()

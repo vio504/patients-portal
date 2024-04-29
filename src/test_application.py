@@ -16,6 +16,9 @@ def test_one():
         patient1.set_ward(3)
         patient1.commit()
         response = get_patient_by_id(uri, patient1.get_id())
+        print(response)
+        print(patient1.get_id())
+        print(patient1.get_name())
         if response['patient_id'] == patient1.get_id() and response["patient_name"] == patient1.get_name():
             print("test one passed")
         else :
