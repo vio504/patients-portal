@@ -105,6 +105,20 @@ class Patient:
 
     def get_room(self):
         return self.patient_room
+    
+    
+    def get(self):
+        response = requests.get(f"{API_CONTROLLER_URL}/patients").json()
+        return [patient['patient_id'] for patient in response if patient['patient_id'] == self.patient_id]
+
+    def update(self, update_data):
+        response = requests.put(f"{API_CONTROLLER_URL}/patient/{self.patient_id}", json=update_data)
+        return response.status_code
+
+    def add(self, update_data):
+        response = requests.post(f"{API_CONTROLLER_URL}/patients", json=update_data)
+        return response.status_code
+
 
     def commit(self):
         if None in (self.patient_ward, self.patient_room):
@@ -120,11 +134,21 @@ class Patient:
             PATIENT_WARD_COLUMN: self.patient_ward,
             PATIENT_ROOM_COLUMN: self.patient_room
         }
-        response = requests.put(f"{API_CONTROLLER_URL}/patients/{self.patient_id}", json=update_data)
-        if response.status_code == 200:
-            print("Patient data committed successfully.")
+
+        existing_patients = self.get()
+
+        if self.patient_id in existing_patients:
+            status_code = self.update(update_data)
+            action = "updated ^_^"
         else:
-            print("Failed to commit patient data to the database.")
+            status_code = self.add(update_data)
+            action = "added Successflly :)"
 
+        if status_code == 200:
+            print(f"Patient {action} successfully!")
+        else:
+            print(f"Failed to {action} patient.")
+        
 
-   
+  
+        
